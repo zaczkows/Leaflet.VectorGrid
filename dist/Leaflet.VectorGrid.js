@@ -510,7 +510,7 @@ L.VectorGrid = L.GridLayer.extend({
       case 1:
         layer = new PointSymbolizer(feat, pxPerExtent);
         // prevent leaflet from treating these canvas points as real markers
-        delete layer.getLatLng;
+        layer.getLatLng = null;
         break;
       case 2:
         layer = new LineSymbolizer(feat, pxPerExtent);
