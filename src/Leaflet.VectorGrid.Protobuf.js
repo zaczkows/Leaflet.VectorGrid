@@ -82,6 +82,14 @@ L.VectorGrid.Protobuf = L.VectorGrid.extend({
     return this;
   },
 
+  // 🍂method getTileUrl(coords: Object): this
+  // Idea taken from L.TileLayer
+  // Called only internally, returns the URL for a tile given its coordinates. Classes extending
+  // L.VectorGrid.Protobuf can override this function to provide custom tile URL naming schemes.
+  getTileUrl: function(coords) {
+    return L.Util.template(this._url, L.extend(coords, this.options));
+  },
+
   _getSubdomain: L.TileLayer.prototype._getSubdomain,
 
   _isCurrentTile: function(coords, tileBounds) {
@@ -119,7 +127,7 @@ L.VectorGrid.Protobuf = L.VectorGrid.extend({
       return Promise.resolve({ layers: [] });
     }
 
-    var tileUrl = L.Util.template(this._url, L.extend(data, this.options));
+    var tileUrl = this.getTileUrl(data);
 
     return fetch(tileUrl, this.options.fetchOptions)
       .then(

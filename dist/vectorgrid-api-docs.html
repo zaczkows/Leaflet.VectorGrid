@@ -33,7 +33,71 @@
 		</div>
 	</div>
 
-	<h2 id='vectorgrid-protobuf'>VectorGrid.Protobuf</h2><p>A <a href="#vectorgrid"><code>VectorGrid</code></a> for vector tiles fetched from the internet.
+	<h2 id='vectorgrid-slicer'>VectorGrid.Slicer</h2><p>A <a href="#vectorgrid"><code>VectorGrid</code></a> for slicing up big GeoJSON or TopoJSON documents in vector
+tiles, leveraging <a href="https://github.com/mapbox/geojson-vt"><code>geojson-vt</code></a>.</p>
+
+<section>
+<h3 id='vectorgrid-slicer-example'>Usage example</h3>
+
+<section >
+
+
+
+
+
+<pre><code>var geoJsonDocument = {
+    type: &#39;FeatureCollection&#39;,
+    features: [ ... ]
+};
+L.vectorGrid.slicer(geoJsonDocument, {
+    vectorTileLayerStyles: {
+        sliced: { ... }
+    }
+}).addTo(map);
+</code></pre><p><a href="#vectorgrid-slicer"><code>VectorGrid.Slicer</code></a> can also handle <a href="https://github.com/mbostock/topojson">TopoJSON</a> transparently:</p>
+<pre><code class="lang-js">var layer = L.vectorGrid.slicer(topojson, options);
+</code></pre>
+<p>The TopoJSON format <a href="https://github.com/mbostock/topojson-specification/blob/master/README.md#215-objects">implicitly groups features into &quot;objects&quot;</a>.
+These will be transformed into vector tile layer names when styling (the
+<code>vectorTileLayerName</code> option is ignored when using TopoJSON).</p>
+
+
+
+</section>
+
+
+</section><section>
+<h3 id='vectorgrid-slicer-option'>Options</h3>
+
+<section >
+
+
+
+<div class='section-comments'>Additionally to these options, <a href="#vectorgrid-slicer"><code>VectorGrid.Slicer</code></a> can take in any
+of the <a href="https://github.com/mapbox/geojson-vt#options"><code>geojson-vt</code> options</a>.</div>
+
+<table><thead>
+	<tr>
+		<th>Option</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</tr>
+	</thead><tbody>
+	<tr id='vectorgrid-slicer-vectortilelayername'>
+		<td><code><b>vectorTileLayerName</b></code></td>
+		<td><code>String</code>
+		<td><code>&#x27;sliced&#x27;</code></td>
+		<td>Vector tiles contain a set of <em>data layers</em>, and those data layers
+contain features. Thus, the slicer creates one data layer, with
+the name given in this option. This is important for symbolizing the data.</td>
+	</tr>
+</tbody></table>
+
+</section>
+
+
+</section><h2 id='vectorgrid-protobuf'>VectorGrid.Protobuf</h2><p>A <a href="#vectorgrid"><code>VectorGrid</code></a> for vector tiles fetched from the internet.
 Tiles are supposed to be protobufs (AKA &quot;protobuffer&quot; or &quot;Protocol Buffers&quot;),
 containing data which complies with the
 <a href="https://github.com/mapbox/vector-tile-spec/tree/master/2.1">MapBox Vector Tile Specification</a>.
@@ -159,69 +223,13 @@ template, and the corresponding option).</div>
 		<td><p>Updates the layer&#39;s URL template and redraws it (unless <code>noRedraw</code> is set to <code>true</code>).</p>
 </td>
 	</tr>
-</tbody></table>
-
-</section>
-
-
-</section><h2 id='vectorgrid-slicer'>VectorGrid.Slicer</h2><p>A <a href="#vectorgrid"><code>VectorGrid</code></a> for slicing up big GeoJSON or TopoJSON documents in vector
-tiles, leveraging <a href="https://github.com/mapbox/geojson-vt"><code>geojson-vt</code></a>.</p>
-
-<section>
-<h3 id='vectorgrid-slicer-example'>Usage example</h3>
-
-<section >
-
-
-
-
-
-<pre><code>var geoJsonDocument = {
-    type: &#39;FeatureCollection&#39;,
-    features: [ ... ]
-};
-L.vectorGrid.slicer(geoJsonDocument, {
-    vectorTileLayerStyles: {
-        sliced: { ... }
-    }
-}).addTo(map);
-</code></pre><p><a href="#vectorgrid-slicer"><code>VectorGrid.Slicer</code></a> can also handle <a href="https://github.com/mbostock/topojson">TopoJSON</a> transparently:</p>
-<pre><code class="lang-js">var layer = L.vectorGrid.slicer(topojson, options);
-</code></pre>
-<p>The TopoJSON format <a href="https://github.com/mbostock/topojson-specification/blob/master/README.md#215-objects">implicitly groups features into &quot;objects&quot;</a>.
-These will be transformed into vector tile layer names when styling (the
-<code>vectorTileLayerName</code> option is ignored when using TopoJSON).</p>
-
-
-
-</section>
-
-
-</section><section>
-<h3 id='vectorgrid-slicer-option'>Options</h3>
-
-<section >
-
-
-
-<div class='section-comments'>Additionally to these options, <a href="#vectorgrid-slicer"><code>VectorGrid.Slicer</code></a> can take in any
-of the <a href="https://github.com/mapbox/geojson-vt#options"><code>geojson-vt</code> options</a>.</div>
-
-<table><thead>
-	<tr>
-		<th>Option</th>
-		<th>Type</th>
-		<th>Default</th>
-		<th>Description</th>
-	</tr>
-	</thead><tbody>
-	<tr id='vectorgrid-slicer-vectortilelayername'>
-		<td><code><b>vectorTileLayerName</b></code></td>
-		<td><code>String</code>
-		<td><code>&#x27;sliced&#x27;</code></td>
-		<td>Vector tiles contain a set of <em>data layers</em>, and those data layers
-contain features. Thus, the slicer creates one data layer, with
-the name given in this option. This is important for symbolizing the data.</td>
+	<tr id='vectorgrid-protobuf-gettileurl'>
+		<td><code><b>getTileUrl</b>(<nobr>&lt;Object&gt;</nobr> <i>coords</i>)</nobr></code></td>
+		<td><code>this</code></td>
+		<td><p>Idea taken from L.TileLayer
+Called only internally, returns the URL for a tile given its coordinates. Classes extending
+L.VectorGrid.Protobuf can override this function to provide custom tile URL naming schemes.</p>
+</td>
 	</tr>
 </tbody></table>
 
