@@ -214,6 +214,12 @@ L.VectorGrid = L.GridLayer.extend({
 
   _createLayer: function(feat, pxPerExtent, layerStyle) {
     var layer;
+    feat.properties.getId = (function() {
+      const id = feat.id;
+      return function() {
+        return id;
+      };
+    })();
     switch (feat.type) {
       case 1:
         layer = new PointSymbolizer(feat, pxPerExtent);
